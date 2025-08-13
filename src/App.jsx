@@ -60,7 +60,7 @@ export default function App() {
 
       <ul style={{ marginTop: 16 }}>
         {todos.map(t => (
-          <li style={{color: "white"}} key={t.id}>{t.Text}</li>
+          <li key={t.id}>{t.text}</li>
         ))}
       </ul>
     </div>
