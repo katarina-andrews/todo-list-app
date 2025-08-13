@@ -1,5 +1,18 @@
-## todo-list-dynamodb
+# todo-list-dynamodb
 
 A simple app that uses DynamoDB and React to manage tasks. 
 
 [Live website ](https://todo-list-dynamodb.vercel.app/)
+
+## Project Setup
+
+- Added IAM user with AmazonDynamoDBFullAccess policy.
+- Used ```npm create vite@latest my-app -- --template react``` to create fresh React project.
+- Ran ```npm run dev``` 
+- Made .env.local file and added the security credentials (Access key ID & Secret access key).
+- Installed SDK Packages ```npm install @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb```
+- Added template code to ```App.jsx```
+
+## DynamoDB table
+
+![DynamoDB table](src/table.png)
