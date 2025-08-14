@@ -1,4 +1,4 @@
-# todo-list-dynamodb
+# todo-list-app
 
 A simple app that uses DynamoDB and React to manage tasks. 
 
@@ -11,7 +11,9 @@ A simple app that uses DynamoDB and React to manage tasks.
 - Ran ```npm install``` and ```npm run dev``` 
 - Made ```.env.local``` file and added the security credentials (Access key ID & Secret access key).
 - Installed SDK Packages ```npm install @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb```
-- Added template code to ```App.jsx```
+- Made a components folder with a file named ```Dynamo.jsx```, and added template code to it
+- Imported ```Dynamo``` from ```Dynamo.jsx``` to ```App.jsx```
+- Ran ```npm run build```
 
 ## DynamoDB table
 
