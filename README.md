@@ -12,6 +12,7 @@ A simple app that uses DynamoDB and React to manage tasks.
 - Made ```.env.local``` file and added the security credentials (Access key ID & Secret access key).
 - Installed SDK Packages ```npm install @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb```
 - Added template code to ```App.jsx```
+- Built a helper module (```dynamo.js```) to hold the AWS code
 - Ran ```npm run build```
 
 ## DynamoDB table
