@@ -41,7 +41,7 @@ export default function App() {
 
   const handleAdd = async () => {
     if (!text.trim()) return;
-    const newItem = { id: Date.now().toString(), text, completed: false };
+    const newItem = { id: Date.now().toString(), TodoText: text, IsComplete: false };
     await createTodo(newItem);
     setTodos(prev => [...prev, newItem]);
     setText('');
@@ -60,7 +60,7 @@ export default function App() {
 
       <ul style={{ marginTop: 16 }}>
         {todos.map(t => (
-          <li key={t.id}>{t.text}</li>
+          <li key={t.id}>{t.TodoText}</li>
         ))}
       </ul>
     </div>
