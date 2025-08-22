@@ -1,59 +1,106 @@
-import React, { useState, useEffect } from 'react';
-import { scanTodos, createTodo } from './dynamo.js';
-
+import { useState, useEffect } from "react";
+import {
+  scanTodos,
+  createTodo,
+  deleteTodoById,
+  updateTodo,
+} from "./utils/dynamo.js";
+import List from "@mui/material/List";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import TodoListItem from "./components/TodoListItem";
+import TodoEditor from "./components/TodoEditor";
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [text, setText] = useState("");
+  const [todoToEdit, setTodoToEdit] = useState({});
 
-  const [todos, setTodos] = useState([]); // the array where scanCommand will save the information 
-  const [text, setText] = useState(''); // string that is representing the text that you want to save in the table 
-
-
-  // The useEffect hook is called every time the component is showed to the user 
-  // onload event on html
   useEffect(() => {
-    scanTodos(setTodos)
+    async function getTodos() {
+      const scanned = await scanTodos();
+      setTodos(scanned);
+    }
+    getTodos();
   }, []);
 
   const changeHandlerText = (event) => {
+    const data = event.target.value;
+    setText(data);
+  };
 
-    const data = event.target.value
-    setText(data)
+  const handleCreateTodo = async () => {
+    const createdTodo = await createTodo(text);
 
-  }
+    setTodos([...todos, createdTodo]);
+    setText("");
+  };
 
-  const createHandler = () => {
+  const handleDeleteTodo = async (id) => {
+    await deleteTodoById(id);
 
-    const item = {
-      id: Date.now().toString(),
-      text: text,
-      completed: false
-    }
+    const filteredTodos = todos.filter((todo) => {
+      return todo.id != id;
+    });
 
-    createTodo(item)
-    window.location.reload()
+    setTodos(filteredTodos);
+  };
 
-  }
+  const handleUpdateTodo = async () => {
+    await updateTodo(todoToEdit);
+
+    setTodos((previousTodos) => {
+      return previousTodos.map((todo) => {
+        return todo.id === todoToEdit.id ? todoToEdit : todo;
+      });
+    });
+    setTodoToEdit({});
+  };
 
   return (
     <>
-      <div style={{ padding: 20 }}>
+      <div className="todo-div" style={{ padding: 20 }}>
         <h1>Todo App</h1>
-        <input
-          value={text}
-          onChange={changeHandlerText}
-          style={{ marginRight: 8 }}
-        />
+    
+        <Stack spacing={2} direction="row">
+          <TextField
+            value={text}
+            // defaultValue={text}
+            onChange={changeHandlerText}
+            id="filled-basic"
+            label="What todo?"
+            variant="filled"
+            color="success"
+          />
 
-        <button onClick={createHandler} >Send Data</button>
-
-        <ul style={{ marginTop: 16 }}>
-          {todos.map(t => (
-            <li key={t.id}>{t.text}</li>
-          ))}
-        </ul>
+          <Button variant="contained" color="success" onClick={() => handleCreateTodo()}>
+            Create Todo
+          </Button>
+        </Stack>
+        <List dense sx={{ width: "100%", maxWidth: 360 }}>
+          {todos.map((todoElem) =>
+            todoToEdit?.id === todoElem.id ? (
+              <TodoEditor
+                key={todoToEdit.id + "edit"}
+                todoElem={todoElem}
+                todoToEdit={todoToEdit}
+                setTodoToEdit={setTodoToEdit}
+                handleUpdateTodo={handleUpdateTodo}
+              />
+            ) : (
+              <TodoListItem
+                key={todoElem.id}
+                todoElem={todoElem}
+                setTodoToEdit={setTodoToEdit}
+                handleDeleteTodo={handleDeleteTodo}
+              />
+            )
+          )}
+        </List>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
