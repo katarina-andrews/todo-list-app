@@ -1,0 +1,25 @@
+$buff: hsla(24, 69%, 67%, 1);
+$sinopia: hsla(18, 58%, 46%, 1);
+$cornsilk: hsla(52, 94%, 94%, 1);
+
+* {
+  color: $sinopia;
+}
+
+body {
+  background-color: $cornsilk;
+}
+
+.todo-div {
+  h1 {
+    font-size: 3rem;
+  }
+
+  ul {
+    font-size: 2rem;
+  }
+
+  svg {
+    cursor: pointer;
+  }
+}
