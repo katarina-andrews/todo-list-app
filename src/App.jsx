@@ -1,68 +1,104 @@
-import React, { useState, useEffect } from 'react';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { useState, useEffect } from "react";
 import {
-  DynamoDBDocumentClient,
-  ScanCommand,
-  PutCommand
-} from '@aws-sdk/lib-dynamodb';
+  scanTodos,
+  createTodo,
+  deleteTodoById,
+  updateTodo,
+} from "./utils/dynamo.js";
+import List from "@mui/material/List";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import TodoListItem from "./components/TodoListItem";
+import TodoEditor from "./components/TodoEditor";
 
-const client = new DynamoDBClient({
-  region: import.meta.env.VITE_AWS_REGION,
-  credentials: {
-    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
-    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY
-  }
-});
-const docClient = DynamoDBDocumentClient.from(client);
-
-
-async function scanTodos() {
-  const { Items } = await docClient.send(
-    new ScanCommand({ TableName: 'Todo' })
-  );
-  return Items || [];
-}
-
-
-async function createTodo(item) {
-  await docClient.send(
-    new PutCommand({ TableName: 'Todo', Item: item })
-  );
-}
-
-export default function App() {
+function App() {
   const [todos, setTodos] = useState([]);
-  const [text, setText] = useState('');
-
+  const [text, setText] = useState("");
+  const [todoToEdit, setTodoToEdit] = useState({});
 
   useEffect(() => {
-    scanTodos().then(setTodos);
+    async function getTodos() {
+      const scanned = await scanTodos();
+      setTodos(scanned);
+    }
+    getTodos();
   }, []);
 
-  const handleAdd = async () => {
-    if (!text.trim()) return;
-    const newItem = { id: Date.now().toString(), TodoText: text, IsComplete: false };
-    await createTodo(newItem);
-    setTodos(prev => [...prev, newItem]);
-    setText('');
+  const changeHandlerText = (event) => {
+    const data = event.target.value;
+    setText(data);
   };
 
-  return (
-    <div style={{ padding: 20 }}>
-      <h1>Todo App</h1>
-      <input
-        value={text}
-        onChange={e => setText(e.target.value)}
-        placeholder="New todo"
-        style={{ marginRight: 8 }}
-      />
-      <button onClick={handleAdd}>Add</button>
+  const handleCreateTodo = async () => {
+    const createdTodo = await createTodo(text);
 
-      <ul style={{ marginTop: 16 }}>
-        {todos.map(t => (
-          <li key={t.id}>{t.TodoText}</li>
-        ))}
-      </ul>
-    </div>
+    setTodos([...todos, createdTodo]);
+    setText("");
+  };
+
+  const handleDeleteTodo = async (id) => {
+    await deleteTodoById(id);
+
+    const filteredTodos = todos.filter((todo) => {
+      return todo.id != id;
+    });
+
+    setTodos(filteredTodos);
+  };
+
+  const handleUpdateTodo = async () => {
+    await updateTodo(todoToEdit);
+
+    setTodos((previousTodos) => {
+      return previousTodos.map((todo) => {
+        return todo.id === todoToEdit.id ? todoToEdit : todo;
+      });
+    });
+    setTodoToEdit({});
+
+  return (
+    <>
+      <div className="todo-div" style={{ padding: 20 }}>
+        <h1>Todo App</h1>
+    
+        <Stack spacing={2} direction="row">
+          <TextField
+            value={text}
+            onChange={changeHandlerText}
+            id="filled-basic"
+            label="What todo?"
+            variant="filled"
+            color="success"
+          />
+              
+          <Button variant="contained" color="success" onClick={() => handleCreateTodo()}>
+            Create Todo
+          </Button>
+        </Stack>
+        <List dense sx={{ width: "100%" }}>
+          {todos.map((todoElem) =>
+            todoToEdit?.id === todoElem.id ? (
+              <TodoEditor
+                key={todoToEdit.id + "edit"}
+                todoElem={todoElem}
+                todoToEdit={todoToEdit}
+                setTodoToEdit={setTodoToEdit}
+                handleUpdateTodo={handleUpdateTodo}
+              />
+            ) : (
+              <TodoListItem
+                key={todoElem.id}
+                todoElem={todoElem}
+                setTodoToEdit={setTodoToEdit}
+                handleDeleteTodo={handleDeleteTodo}
+              />
+            )
+          )}
+        </List>
+      </div>
+    </>
   );
 }
+
+export default App;
