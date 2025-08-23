@@ -68,7 +68,7 @@ export const updateTodo = async (todo) => {
     },
     ExpressionAttributeValues: {
       ":TodoText": TodoText,
-      ":IsComplete": "IsComplete",
+      ":IsComplete": IsComplete,
     },
   });
 
