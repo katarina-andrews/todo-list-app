@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import { MdOutlineEditNote } from "react-icons/md";
 import Checkbox from "@mui/material/Checkbox";
@@ -6,36 +6,50 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import { updateTodo } from "../utils/dynamo";
+
 export default function TodoListItem({
   todoElem,
   setTodoToEdit,
   handleDeleteTodo,
 }) {
-  const [checked, setChecked] = React.useState([0]);
+   const [isChecked, setIsChecked] = useState(todoElem.IsComplete);
+
+  async function markComplete() {
+    setIsChecked(!isChecked);
+
+    const todoToEdit = {
+      id: todoElem.id,
+      TodoText: todoElem.TodoText,
+      IsComplete: !todoElem.IsComplete,
+    };
+
+    console.log(todoToEdit);
+    await updateTodo(todoToEdit);
+  }
+  
   return (
     <>
-      <ListItem
-        // key={value}
-
-        disablePadding
-      >
-        <ListItemButton role={undefined} dense>
+    <ListItem disablePadding className="todo-div">
+        <ListItemButton dense>
           <ListItemIcon>
             <Checkbox
               edge="start"
-              // checked={checked.includes(value)}
+              checked={isChecked}
+              onChange={(event) => markComplete(event)}
               tabIndex={-1}
-              disableRipple
-              // inputProps={{ "aria-labelledby": labelId }}
+
             />
-            {todoElem.TodoText}{" "}
+            </ListItemIcon>
+          <ListItemText>
+            <span>{todoElem.TodoText} </span>
+          </ListItemText>
+          <ListItemIcon>
             <MdOutlineEditNote onClick={() => setTodoToEdit(todoElem)} />
             <MdDeleteForever 
-              className="delete-btn"
               onClick={() => handleDeleteTodo(todoElem.id)}
             />
           </ListItemIcon>
-          <ListItemText />
         </ListItemButton>
       </ListItem>
     </>
