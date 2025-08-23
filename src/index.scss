@@ -1,9 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Luckiest+Guy&display=swap");
+
 $buff: hsla(24, 69%, 67%, 1);
 $sinopia: hsla(18, 58%, 46%, 1);
 $cornsilk: hsla(52, 94%, 94%, 1);
 
 * {
   color: $sinopia;
+  font-family: "Architects Daughter", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
 
 body {
@@ -16,7 +21,7 @@ body {
   }
 
   ul {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   svg {
