@@ -66,7 +66,6 @@ function App() {
         <Stack spacing={2} direction="row">
           <TextField
             value={text}
-            // defaultValue={text}
             onChange={changeHandlerText}
             id="filled-basic"
             label="What todo?"
@@ -78,7 +77,7 @@ function App() {
             Create Todo
           </Button>
         </Stack>
-        <List dense sx={{ width: "100%", maxWidth: 360 }}>
+        <List dense sx={{ width: "100%" }}>
           {todos.map((todoElem) =>
             todoToEdit?.id === todoElem.id ? (
               <TodoEditor
