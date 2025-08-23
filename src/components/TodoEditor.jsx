@@ -23,10 +23,11 @@ export default function TodoEditor({
         id="outlined-basic"
         label="Update todo"
         variant="outlined"
+        color="success"
       />
 
-      <Button variant="contained" onClick={() => handleUpdateTodo()}>
-        Submit Updates
+      <Button variant="contained" color="success" onClick={() => handleUpdateTodo()}>
+        Update Todo
       </Button>
     </Stack>
   );
