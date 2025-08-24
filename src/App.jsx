@@ -56,7 +56,7 @@ function App() {
       });
     });
     setTodoToEdit({});
-
+  };
   return (
     <>
       <div className="todo-div" style={{ padding: 20 }}>
@@ -99,7 +99,6 @@ function App() {
       </div>
     </>
   );
-}
 }
 
 export default App;
