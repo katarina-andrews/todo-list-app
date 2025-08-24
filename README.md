@@ -17,6 +17,7 @@ A simple app that uses DynamoDB and React to manage tasks.
 - Styled and added icons
 - Ran ```npm run build```
 
-## DynamoDB table
-
-![DynamoDB table](src/table.png)
+## Day 4 features
+- Update: Click the pencil icon to edit todo task
+- Delete: Click the trash icon to delete todo task
+- Checkbox: Check off completed todo tasks 
