@@ -21,3 +21,6 @@ A simple app that uses DynamoDB and React to manage tasks.
 - Update: Click the pencil icon to edit todo task
 - Delete: Click the trash icon to delete todo task
 - Checkbox: Check off completed todo tasks 
+
+<img src="src/check-complete.png" alt="Todo tasks completed in ui" width="450" height="300">
+<img src="src/table.png" alt="Todo tasks completed in dynamoDB" width="550" height="300">
