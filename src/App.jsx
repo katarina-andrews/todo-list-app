@@ -56,7 +56,6 @@ function App() {
       });
     });
     setTodoToEdit({});
-  };
 
   return (
     <>
@@ -72,7 +71,7 @@ function App() {
             variant="filled"
             color="success"
           />
-
+              
           <Button variant="contained" color="success" onClick={() => handleCreateTodo()}>
             Create Todo
           </Button>
